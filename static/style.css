@@ -1,0 +1,26 @@
+h1 {
+    color: black;
+    text-align: center;
+    font-style: italic;
+}
+
+body {
+    background-color: lavender;
+}
+
+
+
+.userInput{
+    position: fixed;
+    text-align: center;
+    height: 90vh;
+    width: 53vw;
+    right: 60vw;
+    left: 23vw;
+    top: 15vh;
+  }
+
+.submit {
+    position: fixed;
+    left: 54vw;
+}
