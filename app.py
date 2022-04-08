@@ -74,7 +74,7 @@ def index():
     new start page
     """
 
-    return flask.redirect(flask.url_for("login"))
+    return flask.render_template("landing.html")
 
 
 @app.route("/handle_login", methods=["GET", "POST"])
