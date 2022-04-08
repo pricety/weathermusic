@@ -56,7 +56,7 @@ def location():
 
 
 @app.route("/home")
-def home(access_token):
+def home():
     zipcode = session.get("zipcode") or ""
 
 
