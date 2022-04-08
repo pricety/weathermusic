@@ -4,6 +4,7 @@ files to use their functions"""
 import os
 import flask
 import flask_login
+from flask import session
 from flask_login import LoginManager
 from models import db, Emails
 from dotenv import find_dotenv, load_dotenv
@@ -40,9 +41,22 @@ def user(user_id):
     return Emails.query.get(int(user_id))
 
 
+@app.route("/location", methods=["GET", "POST"])
+def location():
+    if flask.request.method == "POST":
+        print("POST")
+        session["zipcode"] = flask.request.form["zipcode"]
+
+        return flask.redirect("/home")
+
+    return flask.render_template("location.html")
+
+
 @app.route("/home")
 def home():
-    return flask.render_template("home.html", client_secret=client_secret, client_id=client_id, redirect_uri=redirect_uri)
+    zipcode = session.get("zipcode") or ""
+
+    return flask.render_template("home.html", zipcode=zipcode)
 
 
 @app.route("/")

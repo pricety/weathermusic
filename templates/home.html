@@ -6,10 +6,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
   </head>
-  <body>
-    <h1>Welcome</h1>
-  </body>
   <script>
+    console.info("{{ zipcode }}");
+    if (!"{{ zipcode }}") {
+      window.location.href = "/location";
+    }
+
     // Grab token if in hash
     if (!!window.location.hash) {
       const matches = window.location.hash.match(
@@ -30,4 +32,8 @@
 
     if (!token) loginSpotify();
   </script>
+  <body>
+    <h1>Welcome</h1>
+    <p>Showing weather for {{ zipcode }}</p>
+  </body>
 </html>
