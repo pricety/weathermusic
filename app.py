@@ -60,33 +60,8 @@ def home():
     zipcode = session.get("zipcode") or ""
 
 
-    response = requests.get(
-        SPOTIFY_GET_TRACK_URL,
-        headers={
-            "Authorization": "Bearer BQDqDWJtJ_-ChDKT5Jvt3Y_leYY_aPZO9OS4H2ko7K64uHdtdvQ2oiJ0Wh3DakfqrTi5ecbiWzxyIPLZwRDIQ9jDMTK2EOY6dO1V1HYZXbx_AJWD1sNiI5ccoQ8Cl72PbaDWHpMQd8U21jqSBRmzfBKoCK4N2kGYAL5_qxdsqfRiYnLgy2hjdv8aQPPHmf_AAeWDoDleUCUsRHKopN4UUrMhYAKRXA"
-        }
-    )
-    json_resp = response.json()
-
-
-    track_id = json_resp['album']['id']
-    track_name = json_resp['name']
-    artists = [artist for artist in json_resp['artists']]
-
-    link = json_resp['external_urls']['spotify']
-
-    artist_names = ', '.join([artist['name'] for artist in artists])
-
-    current_track_info = {
-        "id": track_id,
-        "track_name": track_name,
-        "artists": artist_names,
-        "link": link
-}
-
     return flask.render_template(
         "home.html",
-        current_track_info=current_track_info,
         zipcode=zipcode
     )
 
