@@ -1,11 +1,12 @@
 # pylint: disable = invalid-envvar-default, no-member, redefined-outer-name
 """import libaries and calling other`
 files to use their functions"""
+import email
 import os
 import flask
 import flask_login
 from flask import session
-from flask_login import LoginManager
+from flask_login import LoginManager, current_user
 from models import db, Emails
 from dotenv import find_dotenv, load_dotenv
 from passlib.hash import sha256_crypt
@@ -44,9 +45,12 @@ def user(user_id):
 @app.route("/location", methods=["GET", "POST"])
 def location():
     if flask.request.method == "POST":
-        print("POST")
+        
+        #print("POST")
         session["zipcode"] = flask.request.form["zipcode"]
-
+        result = Emails.query.filter_by(email=session.get("email")).first()
+        result.zipcode = session.get("zipcode")
+        db.session.commit()
         return flask.redirect("/home")
 
     return flask.render_template("location.html")
@@ -55,7 +59,7 @@ def location():
 @app.route("/home")
 def home():
     zipcode = session.get("zipcode") or ""
-
+    print(session.get("email"))
     return flask.render_template("home.html", zipcode=zipcode)
 
 
@@ -81,6 +85,8 @@ def login():
             user = Emails.query.filter_by(email=email).first()
             if sha256_crypt.verify(password, user.password):
                 flask_login.login_user(user)
+                session["email"] = user.email
+                print(session["email"])
                 return flask.redirect(flask.url_for("home"))
         flask.flash("Your email or password is incorrect!")
         return flask.redirect(flask.url_for("login"))
