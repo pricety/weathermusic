@@ -34,7 +34,7 @@ with app.app_context():
 
 SPOTIFY_GET_TRACK_URL = 'https://api.spotify.com/v1/tracks/2TpxZ7JUBn3uw46aR7qd6V'
 
-ACCESS_TOKEN = 'BQD1il3IsV0V1T9TwlRRP8fdSkGmKCiJSusnm7ufvTPDVcpbPNbhB1OGoCMpnnIi6B9H017GKzPMW6DABq3A9lam-aFRsmk3uiibA_9TFvFM_ltzua7CG3Da5eGXbfbCIcohpKoX6JoIjPxuGdkV3wk1dz73zEDScKR24j3dYlwAGcZ1nHUoNrf-echxhwplDCLxkN2uI2m28G0X-4SmRNwSwx60xg'
+ACCESS_TOKEN = 'BQDqDWJtJ_-ChDKT5Jvt3Y_leYY_aPZO9OS4H2ko7K64uHdtdvQ2oiJ0Wh3DakfqrTi5ecbiWzxyIPLZwRDIQ9jDMTK2EOY6dO1V1HYZXbx_AJWD1sNiI5ccoQ8Cl72PbaDWHpMQd8U21jqSBRmzfBKoCK4N2kGYAL5_qxdsqfRiYnLgy2hjdv8aQPPHmf_AAeWDoDleUCUsRHKopN4UUrMhYAKRXA'
 
 @login_manager.user_loader
 def user(user_id):
@@ -63,7 +63,7 @@ def home():
     response = requests.get(
         SPOTIFY_GET_TRACK_URL,
         headers={
-            "Authorization": "Bearer BQD1il3IsV0V1T9TwlRRP8fdSkGmKCiJSusnm7ufvTPDVcpbPNbhB1OGoCMpnnIi6B9H017GKzPMW6DABq3A9lam-aFRsmk3uiibA_9TFvFM_ltzua7CG3Da5eGXbfbCIcohpKoX6JoIjPxuGdkV3wk1dz73zEDScKR24j3dYlwAGcZ1nHUoNrf-echxhwplDCLxkN2uI2m28G0X-4SmRNwSwx60xg"
+            "Authorization": "Bearer BQDqDWJtJ_-ChDKT5Jvt3Y_leYY_aPZO9OS4H2ko7K64uHdtdvQ2oiJ0Wh3DakfqrTi5ecbiWzxyIPLZwRDIQ9jDMTK2EOY6dO1V1HYZXbx_AJWD1sNiI5ccoQ8Cl72PbaDWHpMQd8U21jqSBRmzfBKoCK4N2kGYAL5_qxdsqfRiYnLgy2hjdv8aQPPHmf_AAeWDoDleUCUsRHKopN4UUrMhYAKRXA"
         }
     )
     json_resp = response.json()
