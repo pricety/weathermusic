@@ -93,7 +93,7 @@ def login():
                 session["email"] = user.email
                 print(session.get("email"))
                 return flask.redirect(flask.url_for("home"))
-        flask.flash("Your email or password is incorrect!")
+        flask.flash("Your email or password is incorrect!", "danger")
         return flask.redirect(flask.url_for("login"))
     return flask.render_template("login.html")
 
@@ -110,14 +110,14 @@ def signup():
         hashPassword = sha256_crypt.hash(password)
         emailtoAdd = Emails(email=email, password=hashPassword)
         if len(Emails.query.filter_by(email=email).all()) != 0:
-            flask.flash("Email you have typed already exists")
+            flask.flash("Email you have typed already exists", "danger")
             return flask.redirect(flask.url_for("signup"))
         db.session.add(emailtoAdd)
         db.session.commit()
-        flask.flash("signup has been successful")
+        flask.flash("signup has been successful", "success")
         return flask.redirect(flask.url_for("login"))
 
-    return flask.render_template("signup.html")
+    return flask.render_template("login.html")
 
 
 @app.route("/spotify_login", methods=["GET"])

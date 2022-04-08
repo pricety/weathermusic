@@ -1,13 +1,42 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+      <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat">
+      <link rel="stylesheet" href="/static/style.css" />
+      <title>Home Page</title>
   </head>
-  <body>
-    <h1>Welcome</h1>
+<body id = "home-page">
+    <h1>Welcome </h1>
     <p>Showing weather for {{ zipcode }}</p>
-  </body>
+</body>  
+  <script>
+    console.info("{{ zipcode }}");
+    if (!"{{ zipcode }}") {
+      window.location.href = "/location";
+    }
+
+    // Grab token if in hash
+    if (!!window.location.hash) {
+      const matches = window.location.hash.match(
+        /access_token=(.*)&token_type/
+      );
+      if (!!matches && matches.length == 2) {
+        const token = matches[1];
+        localStorage.setItem("token", token);
+        window.location.href = "/home";
+      }
+    }
+
+    const loginSpotify = () => {
+      window.location.href = "/spotify_login";
+    };
+
+    const token = localStorage.getItem("token");
+
+    if (!token) loginSpotify();
+  </script>
 </html>
