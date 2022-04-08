@@ -58,12 +58,12 @@ def location():
 
 @app.route("/home")
 def home():
+    if session.get("token") == None:
+        return flask.redirect("/spotify_login")
+
     zipcode = session.get("zipcode") or ""
     if zipcode == "":
         return flask.redirect("/location")
-
-    if session.get("token") == None:
-        return flask.redirect("/spotify_login")
 
     return flask.render_template("home.html", zipcode=zipcode)
 
