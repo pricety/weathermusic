@@ -45,8 +45,8 @@ def user(user_id):
 @app.route("/location", methods=["GET", "POST"])
 def location():
     if flask.request.method == "POST":
-        
-        #print("POST")
+
+        # print("POST")
         session["zipcode"] = flask.request.form["zipcode"]
         result = Emails.query.filter_by(email=session.get("email")).first()
         result.zipcode = session.get("zipcode")
@@ -59,7 +59,12 @@ def location():
 @app.route("/home")
 def home():
     zipcode = session.get("zipcode") or ""
-    print(session.get("email"))
+    if zipcode == "":
+        return flask.redirect("/location")
+
+    if session.get("token") == None:
+        return flask.redirect("/spotify_login")
+
     return flask.render_template("home.html", zipcode=zipcode)
 
 
@@ -86,7 +91,7 @@ def login():
             if sha256_crypt.verify(password, user.password):
                 flask_login.login_user(user)
                 session["email"] = user.email
-                print(session["email"])
+                print(session.get("email"))
                 return flask.redirect(flask.url_for("home"))
         flask.flash("Your email or password is incorrect!", "danger")
         return flask.redirect(flask.url_for("login"))
@@ -134,7 +139,11 @@ def spotify_login():
 
 @app.route("/callback", methods=["GET", "POST"])
 def callback():
-    return flask.redirect("/home")
+    if flask.request.method == "GET":
+        return flask.render_template("callback.html")
+    else:
+        session["token"] = flask.request.args["token"]
+        return flask.redirect("/home")
 
 
 app.run(
