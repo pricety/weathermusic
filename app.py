@@ -48,8 +48,8 @@ def location():
 
         # print("POST")
         session["zipcode"] = flask.request.form["zipcode"]
-        result = Emails.query.filter_by(email=session["email"]).first()
-        result.zipcode = session["zipcode"]
+        result = Emails.query.filter_by(email=session.get("email")).first()
+        result.zipcode = session.get("zipcode")
         db.session.commit()
         return flask.redirect("/home")
 
@@ -58,11 +58,11 @@ def location():
 
 @app.route("/home")
 def home():
-    zipcode = session["zipcode"] or ""
+    zipcode = session.get("zipcode") or ""
     if zipcode == "":
         return flask.redirect("/location")
 
-    if session["token"] == None:
+    if session.get("token") == None:
         return flask.redirect("/spotify_login")
 
     return flask.render_template("home.html", zipcode=zipcode)
@@ -91,7 +91,7 @@ def login():
             if sha256_crypt.verify(password, user.password):
                 flask_login.login_user(user)
                 session["email"] = user.email
-                print(session["email"])
+                print(session.get("email"))
                 return flask.redirect(flask.url_for("home"))
         flask.flash("Your email or password is incorrect!")
         return flask.redirect(flask.url_for("login"))
