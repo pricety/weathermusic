@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <script>
+    console.info("{{ zipcode }}");
+    if (!"{{ zipcode }}") {
+      window.location.href = "/location";
+    }
+
+    // Grab token if in hash
+    if (!!window.location.hash) {
+      const matches = window.location.hash.match(
+        /access_token=(.*)&token_type/
+      );
+      if (!!matches && matches.length == 2) {
+        const token = matches[1];
+        localStorage.setItem("token", token);
+        window.location.href = "/home";
+      }
+    }
+
+    const loginSpotify = () => {
+      window.location.href = "/spotify_login";
+    };
+
+    const token = localStorage.getItem("token");
+
+    if (!token) loginSpotify();
+  </script>
+  <body>
+    <h1>Welcome</h1>
+    <p>Showing weather for {{ zipcode }}</p>
+  </body>
+</html>
