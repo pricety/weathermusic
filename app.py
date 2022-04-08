@@ -64,7 +64,33 @@ def home():
     zipcode = session.get("zipcode") or ""
     if zipcode == "":
         return flask.redirect("/location")
+    if session.get("token") != None:
+        token = session.get("token") or ""
 
+        SPOTIFY_GET_TRACK_URL = 'https://api.spotify.com/v1/tracks/11dFghVXANMlKmJXsNCbNl'
+
+        response = requests.get(
+                SPOTIFY_GET_TRACK_URL,
+                headers={
+                    "Authorization": f"Bearer {token}"
+                }
+            )
+        json_resp = response.json()
+
+
+        track_id = json_resp['album']['id']
+        track_name = json_resp['name']
+        artists = [artist for artist in json_resp['artists']]
+
+        link = json_resp['external_urls']['spotify']
+
+        artist_names = ', '.join([artist['name'] for artist in artists])
+        print(response)
+        print(json_resp)
+        print(track_id)
+        return flask.render_template("home.html", zipcode=zipcode, token=token, track_id=track_id, track_name=track_name, artist_names=artist_names, link=link)
+
+    
     return flask.render_template("home.html", zipcode=zipcode)
 
 
@@ -82,6 +108,7 @@ def login():
     """
     login
     """
+    session["token"] = None
     if flask.request.method == "POST":
         data = flask.request.form
         email = data["email"]
