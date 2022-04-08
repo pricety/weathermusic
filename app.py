@@ -45,11 +45,11 @@ def user(user_id):
 @app.route("/location", methods=["GET", "POST"])
 def location():
     if flask.request.method == "POST":
-        
-        #print("POST")
+
+        # print("POST")
         session["zipcode"] = flask.request.form["zipcode"]
-        result = Emails.query.filter_by(email=session.get("email")).first()
-        result.zipcode = session.get("zipcode")
+        result = Emails.query.filter_by(email=session["email"]).first()
+        result.zipcode = session["zipcode"]
         db.session.commit()
         return flask.redirect("/home")
 
@@ -58,8 +58,13 @@ def location():
 
 @app.route("/home")
 def home():
-    zipcode = session.get("zipcode") or ""
-    print(session.get("email"))
+    zipcode = session["zipcode"] or ""
+    if zipcode == "":
+        return flask.redirect("/location")
+
+    if session["token"] == None:
+        return flask.redirect("/spotify_login")
+
     return flask.render_template("home.html", zipcode=zipcode)
 
 
@@ -134,7 +139,11 @@ def spotify_login():
 
 @app.route("/callback", methods=["GET", "POST"])
 def callback():
-    return flask.redirect("/home")
+    if flask.request.method == "GET":
+        return flask.render_template("callback.html")
+    else:
+        session["token"] = flask.request.args["token"]
+        return flask.redirect("/home")
 
 
 app.run(
