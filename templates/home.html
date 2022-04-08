@@ -1,12 +1,33 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
-</head>
-<body>
-    <h1>Welcome </h1>
-</body>
+  </head>
+  <body>
+    <h1>Welcome</h1>
+  </body>
+  <script>
+    // Grab token if in hash
+    if (!!window.location.hash) {
+      const matches = window.location.hash.match(
+        /access_token=(.*)&token_type/
+      );
+      if (!!matches && matches.length == 2) {
+        const token = matches[1];
+        localStorage.setItem("token", token);
+        window.location.href = "/home";
+      }
+    }
+
+    const loginSpotify = () => {
+      window.location.href = "/spotify_login";
+    };
+
+    const token = localStorage.getItem("token");
+
+    if (!token) loginSpotify();
+  </script>
 </html>

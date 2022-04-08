@@ -8,6 +8,7 @@ from flask_login import LoginManager
 from models import db, Emails
 from dotenv import find_dotenv, load_dotenv
 from passlib.hash import sha256_crypt
+import requests
 
 load_dotenv(find_dotenv())
 app = flask.Flask(__name__)
@@ -15,6 +16,10 @@ app.secret_key = os.getenv("SECRET_KEY")
 
 login_manager = LoginManager()
 login_manager.init_app(app)
+
+client_id = os.getenv("CLIENT_ID")
+client_secret = os.getenv("CLIENT_SECRET")
+redirect_uri = f"{os.getenv('URL')}/callback"
 
 # Point SQLAlchemy to your Heroku database
 app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DATABASE_URL0")
@@ -27,7 +32,6 @@ with app.app_context():
     db.create_all()
 
 
-
 @login_manager.user_loader
 def user(user_id):
     """
@@ -35,9 +39,11 @@ def user(user_id):
     """
     return Emails.query.get(int(user_id))
 
+
 @app.route("/home")
 def home():
-    return flask.render_template("home.html")
+    return flask.render_template("home.html", client_secret=client_secret, client_id=client_id, redirect_uri=redirect_uri)
+
 
 @app.route("/")
 def index():
@@ -46,6 +52,7 @@ def index():
     """
 
     return flask.redirect(flask.url_for("login"))
+
 
 @app.route("/handle_login", methods=["GET", "POST"])
 def login():
@@ -88,8 +95,30 @@ def signup():
     return flask.render_template("signup.html")
 
 
+@app.route("/spotify_login", methods=["GET"])
+def spotify_login():
+    params = {
+        "client_id": client_id,
+        "response_type": "token",
+        "redirect_uri": redirect_uri,
+        "scope": "playlist-read-private"
+    }
+
+    resp = requests.get(
+        "https://accounts.spotify.com/authorize",
+        params=params,
+    )
+
+    return flask.redirect(resp.url)
+
+
+@app.route("/callback", methods=["GET", "POST"])
+def callback():
+    return flask.redirect("/home")
+
+
 app.run(
     debug=True,
     host="0.0.0.0",
-    port=int(os.getenv("PORT", 8080)),
+    port=int(os.getenv("PORT", 8888)),
 )
