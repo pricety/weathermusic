@@ -60,7 +60,7 @@ In order to run the different examples, open the folder with the name of the flo
 Then, open `http://localhost:8888` in a browser.
 
 ## Linting
-missing-function-docstring: functions did not require docstring
-invalid-name: names did not fit the naming convention associated
-no-else-return: block executed return statement for token
-missing-final-newline: adding new line gave trailing whitespace error
+# missing-function-docstring: functions did not require docstring
+# invalid-name: names did not fit the naming convention associated
+# no-else-return: block executed return statement for token
+# missing-final-newline: adding new line gave trailing whitespace error
