@@ -1,16 +1,15 @@
 # pylint: disable = invalid-envvar-default, no-member, redefined-outer-name
 """import libaries and calling other`
 files to use their functions"""
-import email
 import os
 import flask
 import flask_login
+import requests
 from flask import session
-from flask_login import LoginManager, current_user
-from models import db, Emails
+from flask_login import LoginManager
 from dotenv import find_dotenv, load_dotenv
 from passlib.hash import sha256_crypt
-import requests
+from models import db, Emails
 
 load_dotenv(find_dotenv())
 app = flask.Flask(__name__)
@@ -43,7 +42,7 @@ def user(user_id):
 
 
 @app.route("/location", methods=["GET", "POST"])
-def location():
+def location(): # pylint: disable = missing-function-docstring
     if flask.request.method == "POST":
 
         # print("POST")
@@ -57,17 +56,17 @@ def location():
 
 
 @app.route("/home")
-def home():
-    if session.get("token") == None:
+def home(): # pylint: disable = missing-function-docstring
+    if session.get("token") is None:
         return flask.redirect("/spotify_login")
 
     zipcode = session.get("zipcode") or ""
     if zipcode == "":
         return flask.redirect("/location")
-    if session.get("token") != None:
+    if session.get("token") is not None:
         token = session.get("token") or ""
 
-        SPOTIFY_GET_TRACK_URL = 'https://api.spotify.com/v1/tracks/11dFghVXANMlKmJXsNCbNl'
+        SPOTIFY_GET_TRACK_URL = 'https://api.spotify.com/v1/tracks/11dFghVXANMlKmJXsNCbNl' # pylint: disable = invalid-name
 
         response = requests.get(
                 SPOTIFY_GET_TRACK_URL,
@@ -80,7 +79,7 @@ def home():
 
         track_id = json_resp['album']['id']
         track_name = json_resp['name']
-        artists = [artist for artist in json_resp['artists']]
+        artists = list(json_resp['artists'])
 
         link = json_resp['external_urls']['spotify']
 
@@ -88,9 +87,16 @@ def home():
         print(response)
         print(json_resp)
         print(track_id)
-        return flask.render_template("home.html", zipcode=zipcode, token=token, track_id=track_id, track_name=track_name, artist_names=artist_names, link=link)
+        return flask.render_template(
+            "home.html",
+            zipcode=zipcode,
+            token=token,
+            track_id=track_id,
+            track_name=track_name,
+            artist_names=artist_names,
+            link=link
+        )
 
-    
     return flask.render_template("home.html", zipcode=zipcode)
 
 
@@ -134,8 +140,8 @@ def signup():
         data = flask.request.form
         email = data["email"]
         password = data["password"]
-        hashPassword = sha256_crypt.hash(password)
-        emailtoAdd = Emails(email=email, password=hashPassword)
+        hashPassword = sha256_crypt.hash(password) # pylint: disable = invalid-name
+        emailtoAdd = Emails(email=email, password=hashPassword) # pylint: disable = invalid-name
         if len(Emails.query.filter_by(email=email).all()) != 0:
             flask.flash("Email you have typed already exists", "danger")
             return flask.redirect(flask.url_for("signup"))
@@ -148,7 +154,7 @@ def signup():
 
 
 @app.route("/spotify_login", methods=["GET"])
-def spotify_login():
+def spotify_login(): # pylint: disable = missing-function-docstring
     params = {
         "client_id": client_id,
         "response_type": "token",
@@ -165,8 +171,8 @@ def spotify_login():
 
 
 @app.route("/callback", methods=["GET", "POST"])
-def callback():
-    if flask.request.method == "GET":
+def callback(): # pylint: disable = missing-function-docstring
+    if flask.request.method == "GET": # pylint: disable = no-else-return
         return flask.render_template("callback.html")
     else:
         session["token"] = flask.request.args["token"]
