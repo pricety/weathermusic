@@ -12,8 +12,13 @@
 <body id = "home-page">
     <h1>Welcome </h1>
     <p>Showing weather for {{ zipcode }}</p>
+    <p>Temperature: {{ weather_details["temperature"] }} </p>
     <p>Song name: {{ track_name }}</p>
     <p>Artist: {{ artist_names }}</p>
     <a href = "{{ link }}">{{ link }}</a>
+
+    <p>{{ sunset_times["sunrise"] }}</p>
+    <p>{{sunset_times["sunset"]}}</p>
+    <p>{{ sunset_times["daylength"] }} </p>
 </body>
 </html>

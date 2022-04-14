@@ -11,6 +11,8 @@ from models import db, Emails
 from dotenv import find_dotenv, load_dotenv
 from passlib.hash import sha256_crypt
 import requests
+from weather import weather_info
+from sunset import sun_times
 
 load_dotenv(find_dotenv())
 app = flask.Flask(__name__)
@@ -88,7 +90,21 @@ def home():
         print(response)
         print(json_resp)
         print(track_id)
-        return flask.render_template("home.html", zipcode=zipcode, token=token, track_id=track_id, track_name=track_name, artist_names=artist_names, link=link)
+        weather_details, location_details = weather_info(zipcode)
+        sunset_times = sun_times(location_details["lat"], location_details["lon"])
+        print(sunset_times)
+        return flask.render_template(
+            "home.html", 
+            zipcode=zipcode, 
+            token=token, 
+            track_id=track_id, 
+            track_name=track_name, 
+            artist_names=artist_names, 
+            link=link,
+            weather_details = weather_details,
+            location_details = location_details,
+            sunset_times = sunset_times,
+            )
 
     
     return flask.render_template("home.html", zipcode=zipcode)
