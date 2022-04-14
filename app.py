@@ -9,7 +9,10 @@ from flask import session
 from flask_login import LoginManager
 from dotenv import find_dotenv, load_dotenv
 from passlib.hash import sha256_crypt
+from weather import weather_info
+from sunset import sun_times
 from models import db, Emails
+
 
 load_dotenv(find_dotenv())
 app = flask.Flask(__name__)
@@ -76,7 +79,6 @@ def home(): # pylint: disable = missing-function-docstring
             )
         json_resp = response.json()
 
-
         track_id = json_resp['album']['id']
         track_name = json_resp['name']
         artists = list(json_resp['artists'])
@@ -84,18 +86,21 @@ def home(): # pylint: disable = missing-function-docstring
         link = json_resp['external_urls']['spotify']
 
         artist_names = ', '.join([artist['name'] for artist in artists])
-        print(response)
-        print(json_resp)
-        print(track_id)
+        weather_details, location_details = weather_info(zipcode)
+        sunset_times = sun_times(location_details["lat"], location_details["lon"])
         return flask.render_template(
-            "home.html",
-            zipcode=zipcode,
-            token=token,
-            track_id=track_id,
-            track_name=track_name,
-            artist_names=artist_names,
-            link=link
-        )
+            "home.html", 
+            zipcode=zipcode, 
+            token=token, 
+            track_id=track_id, 
+            track_name=track_name, 
+            artist_names=artist_names, 
+            link=link,
+            weather_details = weather_details,
+            location_details = location_details,
+            sunset_times = sunset_times,
+            )
+
 
     return flask.render_template("home.html", zipcode=zipcode)
 
