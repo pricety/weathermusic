@@ -12,7 +12,7 @@ from passlib.hash import sha256_crypt
 from weather import weather_info
 from sunset import sun_times
 from models import db, Emails
-
+from spotify import my_Profile, get_track
 
 load_dotenv(find_dotenv())
 app = flask.Flask(__name__)
@@ -68,34 +68,15 @@ def home(): # pylint: disable = missing-function-docstring
         return flask.redirect("/location")
     if session.get("token") is not None:
         token = session.get("token") or ""
+        track_details = get_track(token)
 
-        SPOTIFY_GET_TRACK_URL = 'https://api.spotify.com/v1/tracks/11dFghVXANMlKmJXsNCbNl' # pylint: disable = invalid-name
-
-        response = requests.get(
-                SPOTIFY_GET_TRACK_URL,
-                headers={
-                    "Authorization": f"Bearer {token}"
-                }
-            )
-        json_resp = response.json()
-
-        track_id = json_resp['album']['id']
-        track_name = json_resp['name']
-        artists = list(json_resp['artists'])
-
-        link = json_resp['external_urls']['spotify']
-
-        artist_names = ', '.join([artist['name'] for artist in artists])
         weather_details, location_details = weather_info(zipcode)
         sunset_times = sun_times(location_details["lat"], location_details["lon"])
         return flask.render_template(
             "home.html", 
             zipcode=zipcode, 
-            token=token, 
-            track_id=track_id, 
-            track_name=track_name, 
-            artist_names=artist_names, 
-            link=link,
+            token=token,
+            track_details=track_details, 
             weather_details = weather_details,
             location_details = location_details,
             sunset_times = sunset_times,
@@ -182,6 +163,14 @@ def callback(): # pylint: disable = missing-function-docstring
     else:
         session["token"] = flask.request.args["token"]
         return flask.redirect("/home")
+
+@app.route("/profile", methods=["GET"])
+def profile():
+    token = session.get("token") or ""
+    response = my_Profile(token)
+    return flask.render_template("profile.html",profile_Details=response)
+
+
 
 
 app.run(
