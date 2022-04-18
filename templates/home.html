@@ -13,10 +13,12 @@
     <h1>Welcome </h1>
     <p>Showing weather for {{ zipcode }}</p>
     <p>Temperature: {{ weather_details["temperature"] }} </p>
-    <p>Song name: {{ track_name }}</p>
-    <p>Artist: {{ artist_names }}</p>
-    <a href = "{{ link }}">{{ link }}</a>
-
+    <p>Song name: {{track_details["track_name"]}}</p>
+    <p>Artist: {{track_details["artist_names"]}} </p>
+    <a href = "{{track_details['link']}}"> {{track_details["link"]}}</a>
+    <a href = "/profile">
+      Click this to go to your profile
+    </a>
     <p>{{ sunset_times["sunrise"] }}</p>
     <p>{{sunset_times["sunset"]}}</p>
     <p>{{ sunset_times["daylength"] }} </p>
