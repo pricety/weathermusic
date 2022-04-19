@@ -12,8 +12,11 @@
 <body id = "home-page">
     <h1>Welcome </h1>
     <p>Showing weather for {{ zipcode }}</p>
-    <p>Song name: {{ track_name }}</p>
-    <p>Artist: {{ artist_names }}</p>
+    <p>{{ phrase }} {{ track_name }}</p>
     <a href = "{{ link }}">{{ link }}</a>
+
+
+<iframe style="border-radius:12px" src="https://open.spotify.com/embed/playlist/{{ track_id }}?utm_source=generator" width="90%" height="380" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"></iframe>
+
 </body>
 </html>
