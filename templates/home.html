@@ -22,5 +22,11 @@
     <p>{{ sunset_times["sunrise"] }}</p>
     <p>{{sunset_times["sunset"]}}</p>
     <p>{{ sunset_times["daylength"] }} </p>
+
+    <h1>Change your zip code</h1>
+    <form action="/location" method="post">
+      <input type="text" name="zipcode" />
+      <button type="submit">Submit</button>
+    </form>
 </body>
 </html>
