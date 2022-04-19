@@ -11,12 +11,19 @@
   </head>
 <body id = "home-page">
     <h1>Welcome </h1>
-    <p>Showing weather for {{ zipcode }}</p>
-    <p>{{ phrase }} {{ track_name }}</p>
-    <a href = "{{ link }}">{{ link }}</a>
+
 
 
 <iframe style="border-radius:12px" src="https://open.spotify.com/embed/playlist/{{ track_id }}?utm_source=generator" width="90%" height="380" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"></iframe>
 
+    <p>Temperature: {{ weather_details["temperature"] }} </p>
+    <p>{{playlist_details["phrase"]}} {{playlist_details["playlist_name"]}}</p>
+    <a href = "{{playlist_details['link']}}"> {{playlist_details["link"]}}</a>
+    <a href = "/profile">
+      Click this to go to your profile
+    </a>
+    <p>{{ sunset_times["sunrise"] }}</p>
+    <p>{{sunset_times["sunset"]}}</p>
+    <p>{{ sunset_times["daylength"] }} </p>
 </body>
 </html>

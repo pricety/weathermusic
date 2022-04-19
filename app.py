@@ -10,7 +10,10 @@ from flask import session
 from flask_login import LoginManager
 from dotenv import find_dotenv, load_dotenv
 from passlib.hash import sha256_crypt
+from weather import weather_info
+from sunset import sun_times
 from models import db, Emails
+from spotify import my_Profile, get_playlist
 
 load_dotenv(find_dotenv())
 app = flask.Flask(__name__)
@@ -59,44 +62,6 @@ def location(): # pylint: disable = missing-function-docstring
 @app.route("/home")
 def home(): # pylint: disable = missing-function-docstring
 
-    SUNNY_PHRASES = [
-        "it's hot outside",
-        "cool off with this playlist"
-    ]
-
-    RAIN_PHRASES = [
-        "it's pouring outside",
-        "stay dry and vibe with this playlist"
-    ]
-
-    SNOW_PHRASES = [
-        "baby, it's cold outside",
-        "warm up with this",
-        "let it snow"
-    ]
-
-    WEATHER_DESCRIPTIONS = [
-        "sunny",
-        "rain",
-        "snow"
-    ]
-
-    description = random.choice(WEATHER_DESCRIPTIONS)
-    random_sunny = random.choice(SUNNY_PHRASES)
-    random_rain = random.choice(RAIN_PHRASES)
-    random_snow = random.choice(SNOW_PHRASES)
-
-
-    if description == "sunny":
-        playlist_id = "6f5nTqNFhK4yl17V8Nj95k"
-        phrase = random_sunny
-    elif description == "rain":
-        playlist_id = "5v6c0Iby3qiUnsHlf0CIYn"
-        phrase = random_rain
-    else:
-        playlist_id = "2mOE7f9OQ4OkCc4qKdDfWq"
-        phrase = random_snow
-
 
     if session.get("token") is None:
         return flask.redirect("/spotify_login")
@@ -106,37 +71,25 @@ def home(): # pylint: disable = missing-function-docstring
         return flask.redirect("/location")
     if session.get("token") is not None:
         token = session.get("token") or ""
+        playlist_details = get_playlist(token)
 
-        SPOTIFY_GET_TRACK_URL = f"https://api.spotify.com/v1/playlists/{playlist_id}" # pylint: disable = invalid-name
-
-        response = requests.get(
-                SPOTIFY_GET_TRACK_URL,
-                headers={
-                    "Authorization": f"Bearer {token}"
-                }
-            )
-        json_resp = response.json()
+        weather_details, location_details = weather_info(zipcode)
+        sunset_times = sun_times(location_details["lat"], location_details["lon"])
 
 
-        track_id = json_resp['id']
-        track_name = json_resp['name']
 
-        link = json_resp['external_urls']['spotify']
-
-        print(response)
-        print(json_resp)
-        print(track_id)
         return flask.render_template(
-            "home.html",
-            zipcode=zipcode,
+            "home.html", 
+            zipcode=zipcode, 
             token=token,
-            track_id=track_id,
-            track_name=track_name,
-            link=link,
-            phrase=phrase
-        )
+            phrase=phrase,
 
-    return flask.render_template("home.html", zipcode=zipcode)
+            playlist_details=playlist_details, 
+            weather_details = weather_details,
+            location_details = location_details,
+            sunset_times = sunset_times,
+            )
+
 
 
 @app.route("/")
@@ -216,6 +169,14 @@ def callback(): # pylint: disable = missing-function-docstring
     else:
         session["token"] = flask.request.args["token"]
         return flask.redirect("/home")
+
+@app.route("/profile", methods=["GET"])
+def profile():
+    token = session.get("token") or ""
+    response = my_Profile(token)
+    return flask.render_template("profile.html",profile_Details=response)
+
+
 
 
 app.run(
