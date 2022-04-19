@@ -5,6 +5,7 @@ import os
 import flask
 import flask_login
 import requests
+import random
 from flask import session
 from flask_login import LoginManager
 from dotenv import find_dotenv, load_dotenv
@@ -12,7 +13,7 @@ from passlib.hash import sha256_crypt
 from weather import weather_info
 from sunset import sun_times
 from models import db, Emails
-from spotify import my_Profile, get_track
+from spotify import my_Profile, get_playlist
 
 load_dotenv(find_dotenv())
 app = flask.Flask(__name__)
@@ -60,6 +61,8 @@ def location(): # pylint: disable = missing-function-docstring
 
 @app.route("/home")
 def home(): # pylint: disable = missing-function-docstring
+
+
     if session.get("token") is None:
         return flask.redirect("/spotify_login")
 
@@ -68,22 +71,25 @@ def home(): # pylint: disable = missing-function-docstring
         return flask.redirect("/location")
     if session.get("token") is not None:
         token = session.get("token") or ""
-        track_details = get_track(token)
+        playlist_details = get_playlist(token)
 
         weather_details, location_details = weather_info(zipcode)
         sunset_times = sun_times(location_details["lat"], location_details["lon"])
+
+
+
         return flask.render_template(
             "home.html", 
             zipcode=zipcode, 
             token=token,
-            track_details=track_details, 
+            phrase=phrase,
+
+            playlist_details=playlist_details, 
             weather_details = weather_details,
             location_details = location_details,
             sunset_times = sunset_times,
             )
 
-
-    return flask.render_template("home.html", zipcode=zipcode)
 
 
 @app.route("/")

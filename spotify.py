@@ -1,5 +1,6 @@
 import os 
 import requests
+import random
 from dotenv import find_dotenv, load_dotenv
 
 load_dotenv(find_dotenv())
@@ -43,24 +44,62 @@ def my_Profile(token):
         dict["images"] = None
     return dict
 
-def get_track(token):
-    track_details = {}
-    SPOTIFY_GET_TRACK_URL = 'https://api.spotify.com/v1/tracks/11dFghVXANMlKmJXsNCbNl' # pylint: disable = invalid-name
+def get_playlist(token):
+    playlist_details = {}
+
+    SUNNY_PHRASES = [
+            "it's hot outside",
+            "cool off with this playlist"
+    ]
+
+    RAIN_PHRASES = [
+        "it's pouring outside",
+        "stay dry and vibe with this playlist"
+    ]
+
+    SNOW_PHRASES = [
+        "baby, it's cold outside",
+        "warm up with this",
+        "let it snow"
+    ]
+
+    WEATHER_DESCRIPTIONS = [
+        "sunny",
+        "rain",
+        "snow"
+    ]
+
+    description = random.choice(WEATHER_DESCRIPTIONS)
+    random_sunny = random.choice(SUNNY_PHRASES)
+    random_rain = random.choice(RAIN_PHRASES)
+    random_snow = random.choice(SNOW_PHRASES)
+
+
+    if description == "sunny":
+        playlist_id = "6f5nTqNFhK4yl17V8Nj95k"
+        phrase = random_sunny
+    elif description == "rain":
+        playlist_id = "5v6c0Iby3qiUnsHlf0CIYn"
+        phrase = random_rain
+    else:
+        playlist_id = "2mOE7f9OQ4OkCc4qKdDfWq"
+        phrase = random_snow
+
+
+    SPOTIFY_GET_PLAYLIST_URL = f"https://api.spotify.com/v1/{playlist_id}" # pylint: disable = invalid-name
 
     response = requests.get(
-            SPOTIFY_GET_TRACK_URL,
+            SPOTIFY_GET_PLAYLIST_URL,
             headers={
                 "Authorization": f"Bearer {token}"
             }
         )
     json_resp = response.json()
 
-    track_details["track_id"] = json_resp['album']['id']
-    track_details["track_name"] = json_resp['name']
-    artists = list(json_resp['artists'])
+    track_details["playlist_id"] = json_resp['id']
+    track_details["playlist_name"] = json_resp['name']
 
     track_details["link"] = json_resp['external_urls']['spotify']
 
-    track_details["artist_names"] = ', '.join([artist['name'] for artist in artists])
 
-    return track_details
+    return (track_details, phrase)
