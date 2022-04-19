@@ -21,6 +21,7 @@ def weather_info(location):
     weather_details = {
         "temperature": current_data["temperature"],
         "description": str(current_data["weather_descriptions"][0]),
+        "weather_code": current_data["weather_code"],
         "wind_speed": current_data["wind_speed"],
         "wind_direction": current_data["wind_dir"],
         "humidity": current_data["humidity"],

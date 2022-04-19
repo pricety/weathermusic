@@ -71,26 +71,20 @@ def home(): # pylint: disable = missing-function-docstring
         return flask.redirect("/location")
     if session.get("token") is not None:
         token = session.get("token") or ""
-        playlist_details = get_playlist(token)
 
         weather_details, location_details = weather_info(zipcode)
         sunset_times = sun_times(location_details["lat"], location_details["lon"])
-
-
+        playlist_details = get_playlist(token, weather_details["weather_code"])
 
         return flask.render_template(
             "home.html", 
             zipcode=zipcode, 
             token=token,
-            phrase=phrase,
-
             playlist_details=playlist_details, 
             weather_details = weather_details,
             location_details = location_details,
             sunset_times = sunset_times,
             )
-
-
 
 @app.route("/")
 def index():
@@ -175,9 +169,6 @@ def profile():
     token = session.get("token") or ""
     response = my_Profile(token)
     return flask.render_template("profile.html",profile_Details=response)
-
-
-
 
 app.run(
     debug=True,

@@ -14,7 +14,7 @@
 
 
 
-<iframe style="border-radius:12px" src="https://open.spotify.com/embed/playlist/{{ track_id }}?utm_source=generator" width="90%" height="380" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"></iframe>
+<iframe style="border-radius:12px" src="https://open.spotify.com/embed/playlist/{{playlist_details['playlist_id']}}?utm_source=generator" width="90%" height="380" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"></iframe>
 
     <p>Temperature: {{ weather_details["temperature"] }} </p>
     <p>{{playlist_details["phrase"]}} {{playlist_details["playlist_name"]}}</p>
@@ -25,7 +25,6 @@
     <p>{{ sunset_times["sunrise"] }}</p>
     <p>{{sunset_times["sunset"]}}</p>
     <p>{{ sunset_times["daylength"] }} </p>
-
     <h1>Change your zip code</h1>
     <form action="/location" method="post">
       <input type="text" name="zipcode" />
