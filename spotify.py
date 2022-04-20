@@ -42,6 +42,8 @@ def my_Profile(token):
             dict["images"] = None
     else:
         dict["images"] = None
+
+    dict["followers"] = json_resp["followers"]["total"]
     return dict
 
 def get_playlist(token, weather_code): 

@@ -10,25 +10,58 @@
       <title>Home Page</title>
   </head>
 <body id = "home-page">
-    <h1>Welcome </h1>
+  <div class = "home-container">
+    <div class = "profile-container">
+      <h2 class = "title">PROFILE</h2>
+      <img class = "profile-image" src = "{{profile_details['images']}}" >
+      <div class = "main-profile">
+        <h3>{{profile_details["display_name"]}}</h3>
+        <h4>{{profile_details["followers"]}} followers</h4>    
+      </div>
+      <h4 class = "profile-email">email: {{profile_details["email"]}}</h4>
+    </div>
+    <div class = "weather-container">
+      <div class = weather-forms>
+        <div class = "location-input">
+        <form action="/location" method="post">
+          <input type="text" name="zipcode" />
+          <button type = "submit" >submit</button>
+        </form>
+        </div>
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="radio" name="metric_options" id="celsius" value="m">
+          <label class="form-check-label" for="celsius">Celsius</label>
+        </div>
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="radio" name="metric_options" id="fahrenheit" value="f">
+          <label class="form-check-label" for="fahrenheit">Fahrenheit</label>
+        </div>
+      </div>
 
-
-
-<iframe style="border-radius:12px" src="https://open.spotify.com/embed/playlist/{{playlist_details['playlist_id']}}?utm_source=generator" width="90%" height="380" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"></iframe>
-
-    <p>Temperature: {{ weather_details["temperature"] }} </p>
-    <p>{{playlist_details["phrase"]}} {{playlist_details["playlist_name"]}}</p>
-    <a href = "{{playlist_details['link']}}"> {{playlist_details["link"]}}</a>
-    <a href = "/profile">
-      Click this to go to your profile
-    </a>
-    <p>{{ sunset_times["sunrise"] }}</p>
-    <p>{{sunset_times["sunset"]}}</p>
-    <p>{{ sunset_times["daylength"] }} </p>
-    <h1>Change your zip code</h1>
-    <form action="/location" method="post">
-      <input type="text" name="zipcode" />
-      <button type="submit">Submit</button>
-    </form>
+      <div class = "basic-weather">
+        <h5>{{ location_details["name"] }}, {{ location_details["region"] }}</h5>
+        <h2>{{ weather_details["temperature"] }}&deg;F </h2>
+        <h3>{{ weather_details["description"] }}</h3>
+        <h4>{{ weather_details["feels_like"] }}</h4>
+      </div>
+      <div class = "sun-info">
+        <h4>{{ sunset_times["sunrise"] }}</h4>
+        <h4>{{ sunset_times["sunset"] }}</h4>
+        <h4>{{ sunset_times["daylength"] }}</h4>
+      </div>
+      <div class = "advanced-weather">
+        <p> {{ weather_details["wind_speed"] }}</p>
+        <p> {{ weather_details["wind_direction"] }}</p>
+        <p> {{ weather_details["humidity"] }}</p>
+        <p> {{ weather_details["cloud_cover"] }}</p>
+        <p> {{ weather_details["uv_index"] }}</p>
+        <p> {{ weather_details["visibility"] }}</p>
+      </div>
+    </div>
+    <div class = "playlist-container">
+      <h4>{{ playlist_details["phrase"] }}</h4>
+      <iframe style="border-radius:15px" src="https://open.spotify.com/embed/playlist/{{playlist_details['playlist_id']}}?utm_source=generator" width="95%" height="90%" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"></iframe>
+    </div>
+  </div>
 </body>
 </html>

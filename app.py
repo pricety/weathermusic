@@ -56,7 +56,7 @@ def location(): # pylint: disable = missing-function-docstring
         db.session.commit()
         return flask.redirect("/home")
 
-    return flask.render_template("location.html")
+    return flask.render_template("home.html")
 
 
 @app.route("/home")
@@ -71,7 +71,7 @@ def home(): # pylint: disable = missing-function-docstring
         return flask.redirect("/location")
     if session.get("token") is not None:
         token = session.get("token") or ""
-
+        profile_details = my_Profile(token)
         weather_details, location_details = weather_info(zipcode)
         sunset_times = sun_times(location_details["lat"], location_details["lon"])
         playlist_details = get_playlist(token, weather_details["weather_code"])
@@ -80,6 +80,7 @@ def home(): # pylint: disable = missing-function-docstring
             "home.html", 
             zipcode=zipcode, 
             token=token,
+            profile_details = profile_details,
             playlist_details=playlist_details, 
             weather_details = weather_details,
             location_details = location_details,

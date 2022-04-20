@@ -30,9 +30,10 @@ def weather_info(location):
         "uv_index": current_data["uv_index"],
         "visibility": current_data["visibility"]
     }
-
+    
     location_details = {
         "name": location_data["name"],
+        "region": location_data["region"],
         "country": location_data["country"],
         "lat": location_data["lat"],
         "lon": location_data["lon"],
