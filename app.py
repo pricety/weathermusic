@@ -13,7 +13,7 @@ from passlib.hash import sha256_crypt
 from weather import weather_info
 from sunset import sun_times
 from models import db, Emails
-from spotify import my_Profile, get_playlist
+from spotify import get_playlist
 
 load_dotenv(find_dotenv())
 app = flask.Flask(__name__)
@@ -24,7 +24,6 @@ login_manager.init_app(app)
 
 client_id = os.getenv("CLIENT_ID")
 client_secret = os.getenv("CLIENT_SECRET")
-redirect_uri = f"{os.getenv('URL')}/callback"
 
 # Point SQLAlchemy to your Heroku database
 app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DATABASE_URL0")
@@ -59,36 +58,37 @@ def location(): # pylint: disable = missing-function-docstring
     return flask.render_template("location.html")
 
 
-@app.route("/home")
+@app.route("/home", methods=["GET", "POST"])
 def home(): # pylint: disable = missing-function-docstring
 
-
-    if session.get("token") is None:
-        return flask.redirect("/spotify_login")
 
     zipcode = session.get("zipcode") or ""
     if zipcode == "":
         return flask.redirect("/location")
-    if session.get("token") is not None:
-        token = session.get("token") or ""
-        playlist_details = get_playlist(token)
 
-        weather_details, location_details = weather_info(zipcode)
-        sunset_times = sun_times(location_details["lat"], location_details["lon"])
+   
+    playlist_details = get_playlist()
 
 
 
-        return flask.render_template(
-            "home.html", 
-            zipcode=zipcode, 
-            token=token,
-            phrase=phrase,
 
-            playlist_details=playlist_details, 
-            weather_details = weather_details,
-            location_details = location_details,
-            sunset_times = sunset_times,
-            )
+
+#    weather_details, location_details = weather_info(zipcode)
+#    sunset_times = sun_times(location_details["lat"], location_details["lon"])
+
+
+
+    return flask.render_template(
+        "home.html", 
+        zipcode=zipcode, 
+#        phrase=phrase,
+        id=id,
+#        name=name,
+        playlist_details=playlist_details, 
+#        weather_details = weather_details,
+#        location_details = location_details,
+#        sunset_times = sunset_times,
+        )
 
 
 
@@ -106,7 +106,6 @@ def login():
     """
     login
     """
-    session["token"] = None
     if flask.request.method == "POST":
         data = flask.request.form
         email = data["email"]
@@ -143,38 +142,6 @@ def signup():
         return flask.redirect(flask.url_for("login"))
 
     return flask.render_template("login.html")
-
-
-@app.route("/spotify_login", methods=["GET"])
-def spotify_login(): # pylint: disable = missing-function-docstring
-    params = {
-        "client_id": client_id,
-        "response_type": "token",
-        "redirect_uri": redirect_uri,
-        "scope": "playlist-read-private"
-    }
-
-    resp = requests.get(
-        "https://accounts.spotify.com/authorize",
-        params=params,
-    )
-
-    return flask.redirect(resp.url)
-
-
-@app.route("/callback", methods=["GET", "POST"])
-def callback(): # pylint: disable = missing-function-docstring
-    if flask.request.method == "GET": # pylint: disable = no-else-return
-        return flask.render_template("callback.html")
-    else:
-        session["token"] = flask.request.args["token"]
-        return flask.redirect("/home")
-
-@app.route("/profile", methods=["GET"])
-def profile():
-    token = session.get("token") or ""
-    response = my_Profile(token)
-    return flask.render_template("profile.html",profile_Details=response)
 
 
 

@@ -1,50 +1,85 @@
 import os 
 import requests
 import random
+import base64
+import json
 from dotenv import find_dotenv, load_dotenv
 
 load_dotenv(find_dotenv())
 
 client_id = os.getenv("CLIENT_ID")
 client_secret = os.getenv("CLIENT_SECRET")
-redirect_uri = f"{os.getenv('URL')}/callback"
 
-def my_Profile(token):
-    dict = {}
-    SPOTIFY_GET_ME = 'https://api.spotify.com/v1/me' # pylint: disable = invalid-name
 
-    response = requests.get(
-            SPOTIFY_GET_ME,
-            headers={
-                "Authorization": f"Bearer {token}"
-            }
-        )
 
-    json_resp = response.json()
-    if "email" in json_resp:
-        dict["email"] = json_resp["email"] 
-    else:
-        dict["email"]= None
-    if "country" in json_resp:
-        dict["country"] = json_resp["country"]
-    else:
-        dict["country"] = None
-    if "display_name" in json_resp:
-        dict["display_name"] = json_resp["display_name"]
-    else: 
-        dict["display_name"] = None
-    print(json_resp)
-    print(json_resp["images"])
-    if "images" in json_resp:
-        if len(json_resp["images"]) != 0:
-            dict["images"] = json_resp["images"][0]["url"]
-        else: 
-            dict["images"] = None
-    else:
-        dict["images"] = None
-    return dict
+def get_playlist():
 
-def get_playlist(token):
+#    GET_TOKEN = 'https://api.spotify.com/api/token'
+#    clients = f"{client_id}:{client_secret}"
+#    clients = clients.encode("ascii")
+#    base64_bytes = base64.b64encode(clients)
+#    base64_clients = base64_bytes.decode('ascii')
+#  
+#    Authorization = {
+#        'Authorization': f'Basic{base64_clients}',
+#        "Content Type": "application/x-www-form-urlencoded"
+#    }
+#    grant_type = 'client_credentials'
+
+#    resp = requests.post(
+#        GET_TOKEN,
+#        grant_type,
+#        headers={
+#            'Authorization': f'Basic {base64_clients}' + base64_clients.replace('\c',''),
+#            "Content Type": "application/x-www-form-urlencoded"
+#        }
+#    )
+
+#    access_token = resp.text
+
+
+    # Step 1 - Authorization
+    url = "https://accounts.spotify.com/api/token"
+    headers = {}
+    data = {}
+
+    # Encode as Base64
+    message = f"{client_id}:{client_secret}"
+    messageBytes = message.encode('ascii')
+    base64Bytes = base64.b64encode(messageBytes)
+    base64Message = base64Bytes.decode('ascii')
+
+
+    headers['Authorization'] = f"Basic {base64Message}"
+    data['grant_type'] = "client_credentials"
+
+    r = requests.post(url, headers=headers, data=data)
+
+    token = r.json()['access_token']
+
+
+
+
+
+#    Authorization = {
+#        'Authorization': f'Basic{base64_clients}',
+#        "Content Type": "application/x-www-form-urlencoded"
+#    }
+#    grant_type = 'client_credentials'
+
+#    resp = requests.post(
+#        GET_TOKEN,
+#        grant_type,
+#        headers={
+#            'Authorization': f'Basic {base64_clients}' + base64_clients.replace('\c',''),
+#            "Content Type": "application/x-www-form-urlencoded"
+#        }
+#    )
+
+
+
+
+
     playlist_details = {}
 
     SUNNY_PHRASES = [
@@ -86,20 +121,47 @@ def get_playlist(token):
         phrase = random_snow
 
 
-    SPOTIFY_GET_PLAYLIST_URL = f"https://api.spotify.com/v1/{playlist_id}" # pylint: disable = invalid-name
-
-    response = requests.get(
-            SPOTIFY_GET_PLAYLIST_URL,
-            headers={
-                "Authorization": f"Bearer {token}"
-            }
-        )
-    json_resp = response.json()
-
-    track_details["playlist_id"] = json_resp['id']
-    track_details["playlist_name"] = json_resp['name']
-
-    track_details["link"] = json_resp['external_urls']['spotify']
+    playlistUrl = f"https://api.spotify.com/v1/playlists/{playlist_id}" # pylint: disable = invalid-name
 
 
-    return (track_details, phrase)
+
+
+    headers = {
+        "Authorization": f"Bearer {token}" 
+    }
+
+    res = requests.get(playlistUrl, headers=headers)
+
+    print(json.dumps(res.json(), indent=2))
+
+#    parsedData = res.parse(res);
+
+    data = res.json()
+
+    playlist_details = {
+        "playlist_id": data["id"],
+        "playlist_name": data["name"],
+        "link": data["external_urls"]["spotify"],
+        "phrase": phrase
+    }
+
+
+
+#    response = requests.get(
+#            SPOTIFY_GET_PLAYLIST_URL,
+#            headers={
+#                "Authorization": f"Bearer {token}"
+#            }
+#        )
+#    json_resp = res.json()
+
+#    id = data['id']
+#    name = data['name']
+
+#    playlist_details["playlist_id"] = json_resp['id']
+#    playlist_details["playlist_name"] = json_resp['name']
+
+#    playlist_details["link"] = json_resp['external_urls']['spotify']
+
+
+    return playlist_details

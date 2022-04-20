@@ -13,17 +13,13 @@
     <h1>Welcome </h1>
 
 
+<div class = "playlist-container">
+      <h4>{{ playlist_details["phrase"] }}</h4>
+      <iframe style="border-radius:15px" src="https://open.spotify.com/embed/playlist/{{playlist_details['playlist_id']}}?utm_source=generator" width="95%" height="90%" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"></iframe>
+    </div>
 
-<iframe style="border-radius:12px" src="https://open.spotify.com/embed/playlist/{{ track_id }}?utm_source=generator" width="90%" height="380" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"></iframe>
 
-    <p>Temperature: {{ weather_details["temperature"] }} </p>
-    <p>{{playlist_details["phrase"]}} {{playlist_details["playlist_name"]}}</p>
-    <a href = "{{playlist_details['link']}}"> {{playlist_details["link"]}}</a>
-    <a href = "/profile">
-      Click this to go to your profile
-    </a>
-    <p>{{ sunset_times["sunrise"] }}</p>
-    <p>{{sunset_times["sunset"]}}</p>
-    <p>{{ sunset_times["daylength"] }} </p>
+    <p> {{  playlist_details["id"] }} </P>
+
 </body>
 </html>
