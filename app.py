@@ -61,36 +61,28 @@ def location(): # pylint: disable = missing-function-docstring
 @app.route("/home", methods=["GET", "POST"])
 def home(): # pylint: disable = missing-function-docstring
 
-
-    zipcode = session.get("zipcode") or ""
-    if zipcode == "":
-        return flask.redirect("/location")
-
+    if flask.request.method == "POST":
+            session["zipcode"] = flask.request.form["zipcode"]
+            result = Emails.query.filter_by(email=session.get("email")).first()
+            result.zipcode = session.get("zipcode")
+            db.session.commit()
+    zipcode = session.get("zipcode") or "30301"
    
-    playlist_details = get_playlist()
 
+    metric_type = flask.request.form.get("metric_options") or "m"
 
-
-
-
-#    weather_details, location_details = weather_info(zipcode)
-#    sunset_times = sun_times(location_details["lat"], location_details["lon"])
-
-
+    weather_details, location_details = weather_info(zipcode, metric_type)
+    sunset_times = sun_times(location_details["lat"], location_details["lon"])
+    playlist_details = get_playlist(weather_details["weather_code"])
 
     return flask.render_template(
         "home.html", 
         zipcode=zipcode, 
-#        phrase=phrase,
-        id=id,
-#        name=name,
         playlist_details=playlist_details, 
-#        weather_details = weather_details,
-#        location_details = location_details,
-#        sunset_times = sunset_times,
+        weather_details = weather_details,
+        location_details = location_details,
+        sunset_times = sunset_times,
         )
-
-
 
 @app.route("/")
 def index():
@@ -142,8 +134,6 @@ def signup():
         return flask.redirect(flask.url_for("login"))
 
     return flask.render_template("login.html")
-
-
 
 
 app.run(

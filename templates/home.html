@@ -7,19 +7,72 @@
       <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
       <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat">
       <link rel="stylesheet" href="/static/style.css" />
+      <link rel = "stylesheet" href = "/static/font/weather-icons.css">  
+      <link rel = "stylesheet" href = "/static/font/weather-icons.min.css">
       <title>Home Page</title>
   </head>
 <body id = "home-page">
-    <h1>Welcome </h1>
 
-
-<div class = "playlist-container">
+  <div class = "home-container">
+    <div class = "profile-container">
+      <h2 class = "title">PROFILE</h2>
+      <img class = "profile-image" src = "{{profile_details['images']}}" >
+      <div class = "main-profile">
+        <h3>{{profile_details["display_name"]}}</h3>
+        <h4>{{profile_details["followers"]}} followers</h4>    
+      </div>
+      <h4 class = "profile-email">email: {{profile_details["email"]}}</h4>
+    </div>
+    <div class = "weather-container">
+      <div class = weather-forms>
+        <div class = "location-input">
+          <form action="/home" method="post" >
+            <input type="text" name="zipcode" />
+            <button type = "submit" >submit</button>
+        </div>
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="radio" name="metric_options" id="celsius" value="m" required>
+          <label class="form-check-label" for="celsius">Celsius</label>
+        </div>
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="radio" name="metric_options" id="fahrenheit" value="f" required>
+          <label class="form-check-label" for="fahrenheit">Fahrenheit</label>
+        </div>
+          </form>
+      </div>
+      <div class = "basic-weather">
+        <h5>{{ location_details["name"] }}, {{ location_details["region"] }}</h5>
+        <h2>{{ weather_details["temperature"] }}&deg;{{ weather_details["metric_type"]}} </h2>
+        <h3>{{ weather_details["description"] }}</h3>
+        <h4> Feels like {{ weather_details["feels_like"] }}&deg;{{ weather_details["metric_type"]}}</h4>
+      </div>
+      <div class = "sun-info">
+        <i class = "wi wi-sunrise"></i> Sunrise
+          <h4>{{ sunset_times["sunrise"] }} UTC</h4>
+        <i class = "wi wi-sunset"></i> Sunset
+          <h4>{{ sunset_times["sunset"] }} UTC</h4>
+        <i class = "wi wi-day-sunny"></i> Daylength
+          <h4>{{ sunset_times["daylength"] }}</h4>
+      </div>
+      <div class = "advanced-weather">
+        <i class = "wi wi-strong-wind"></i> Wind Speed
+          <p> {{ weather_details["wind_speed"] }} {{ weather_details["speed"]}}</p>
+        <i class = "wi wi-wind-direction"></i> Wind Direction
+          <p> {{ weather_details["wind_direction"] }}</p>
+        <i class = "wi wi-humidity"></i> Humidity
+          <p> {{ weather_details["humidity"] }} %</p>
+        <i class = "wi wi-cloudy"></i> Cloud Cover
+          <p> {{ weather_details["cloud_cover"] }} %</p>
+        <i class = "wi wi-day-sunny-overcast"></i> UV Index
+          <p> {{ weather_details["uv_index"] }}</p>
+        <i class="fa fa-eye"></i> Visibility
+          <p> {{ weather_details["visibility"] }} {{ weather_details["speed"]}}</p>
+      </div>
+    </div>
+    <div class = "playlist-container">
       <h4>{{ playlist_details["phrase"] }}</h4>
       <iframe style="border-radius:15px" src="https://open.spotify.com/embed/playlist/{{playlist_details['playlist_id']}}?utm_source=generator" width="95%" height="90%" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"></iframe>
     </div>
-
-
-    <p> {{  playlist_details["id"] }} </P>
-
+  </div>
 </body>
 </html>
