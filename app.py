@@ -44,35 +44,23 @@ def user(user_id):
     """
     return Emails.query.get(int(user_id))
 
-
-@app.route("/location", methods=["GET", "POST"])
-def location(): # pylint: disable = missing-function-docstring
-    if flask.request.method == "POST":
-
-        # print("POST")
-        session["zipcode"] = flask.request.form["zipcode"]
-        result = Emails.query.filter_by(email=session.get("email")).first()
-        result.zipcode = session.get("zipcode")
-        db.session.commit()
-        return flask.redirect("/home")
-
-    return flask.render_template("home.html")
-
-
-@app.route("/home")
+@app.route("/home", methods=["GET", "POST"])
 def home(): # pylint: disable = missing-function-docstring
-
 
     if session.get("token") is None:
         return flask.redirect("/spotify_login")
-
-    zipcode = session.get("zipcode") or ""
-    if zipcode == "":
-        return flask.redirect("/location")
     if session.get("token") is not None:
+        if flask.request.method == "POST":
+            session["zipcode"] = flask.request.form["zipcode"]
+            result = Emails.query.filter_by(email=session.get("email")).first()
+            result.zipcode = session.get("zipcode")
+            db.session.commit()
+        zipcode = session.get("zipcode") or "30301"
+
         token = session.get("token") or ""
+        metric_type = flask.request.form.get("metric_options") or "m"
         profile_details = my_Profile(token)
-        weather_details, location_details = weather_info(zipcode)
+        weather_details, location_details = weather_info(zipcode, metric_type)
         sunset_times = sun_times(location_details["lat"], location_details["lon"])
         playlist_details = get_playlist(token, weather_details["weather_code"])
 

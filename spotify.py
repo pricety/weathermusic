@@ -33,8 +33,7 @@ def my_Profile(token):
         dict["display_name"] = json_resp["display_name"]
     else: 
         dict["display_name"] = None
-    print(json_resp)
-    print(json_resp["images"])
+
     if "images" in json_resp:
         if len(json_resp["images"]) != 0:
             dict["images"] = json_resp["images"][0]["url"]
@@ -94,7 +93,7 @@ def get_playlist(token, weather_code):
             }
         )
     json_resp = response.json()
-    print(json_resp)
+
     playlist_details = {
         "playlist_id": json_resp["id"],
         "playlist_name": json_resp["name"],
