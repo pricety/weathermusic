@@ -46,12 +46,16 @@
         <h4> Feels like {{ weather_details["feels_like"] }}&deg;{{ weather_details["metric_type"]}}</h4>
       </div>
       <div class = "sun-info">
+        <p><a id = "local_date" style = "display: none;">{{ location_details["localdate"] }}</a></p>
         <i class = "wi wi-sunrise"></i> Sunrise
-          <h4>{{ sunset_times["sunrise"] }} UTC</h4>
+          <h4 id = "sunrise_time">{{ sunset_times["sunrise"] }} UTC</h4>
+          <h4 id = "sunrise"></h4>
         <i class = "wi wi-sunset"></i> Sunset
-          <h4>{{ sunset_times["sunset"] }} UTC</h4>
+          <h4 id = "sunset_time">{{ sunset_times["sunset"] }} UTC</h4>
+          <h4 id = "sunset"></h4>
         <i class = "wi wi-day-sunny"></i> Daylength
           <h4>{{ sunset_times["daylength"] }}</h4>
+          <p><a id = "timezone" style = "display: none;">{{ location_details["timezone"] }}</a></p>
       </div>
       <div class = "advanced-weather">
         <i class = "wi wi-strong-wind"></i> Wind Speed
@@ -74,4 +78,19 @@
     </div>
   </div>
 </body>
+<script>
+
+  const sunrise = document.getElementById("sunrise_time").innerHTML;
+  const sunset = document.getElementById("sunset_time").innerHTML;
+  const local_date = document.getElementById("local_date").innerHTML;
+  const sunrise_format = local_date + " " + sunrise;
+  const sunset_format = local_date + " " + sunset;
+  const sunrise_date = new Date(sunrise_format);
+  const sunset_date = new Date(sunset_format);
+  const timeZone = document.getElementById("timezone").innerHTML;
+
+  document.getElementById("sunrise_time").innerHTML = sunrise_date.toLocaleString("en-US", {timeZone, timeStyle: "long",});
+  document.getElementById("sunset_time").innerHTML = sunset_date.toLocaleString("en-US", {timeZone, timeStyle: "long",});
+
+</script>
 </html>

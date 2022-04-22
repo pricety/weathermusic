@@ -42,11 +42,15 @@ def weather_info(location, metric_type):
         "speed": speed
     }
     
+    date_only = location_data["localtime"].split()
+
     location_details = {
         "name": location_data["name"],
         "region": location_data["region"],
         "lat": location_data["lat"],
         "lon": location_data["lon"],
+        "timezone": location_data["timezone_id"],
+        "localdate": date_only[0],
     }
 
     return weather_details, location_details
