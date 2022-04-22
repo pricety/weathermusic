@@ -44,8 +44,13 @@ def user(user_id):
     """
     return Emails.query.get(int(user_id))
 
+
+def valid_zip(s):
+    return len(s) == 5 and s.isdigit()
+
+
 @app.route("/home", methods=["GET", "POST"])
-def home(): # pylint: disable = missing-function-docstring
+def home():  # pylint: disable = missing-function-docstring
 
     if session.get("token") is None:
         return flask.redirect("/spotify_login")
@@ -54,7 +59,10 @@ def home(): # pylint: disable = missing-function-docstring
             session["zipcode"] = flask.request.form["zipcode"]
             result = Emails.query.filter_by(email=session.get("email")).first()
             result.zipcode = session.get("zipcode")
-            db.session.commit()
+            if valid_zip(result.zipcode):
+                db.session.commit()
+            else:
+                flask.flash("invalid zipcode!", "failure")
         zipcode = session.get("zipcode") or "30301"
 
         token = session.get("token") or ""
@@ -65,15 +73,16 @@ def home(): # pylint: disable = missing-function-docstring
         playlist_details = get_playlist(token, weather_details["weather_code"])
 
         return flask.render_template(
-            "home.html", 
-            zipcode=zipcode, 
+            "home.html",
+            zipcode=zipcode,
             token=token,
-            profile_details = profile_details,
-            playlist_details=playlist_details, 
-            weather_details = weather_details,
-            location_details = location_details,
-            sunset_times = sunset_times,
-            )
+            profile_details=profile_details,
+            playlist_details=playlist_details,
+            weather_details=weather_details,
+            location_details=location_details,
+            sunset_times=sunset_times,
+        )
+
 
 @app.route("/")
 def index():
@@ -115,8 +124,10 @@ def signup():
         data = flask.request.form
         email = data["email"]
         password = data["password"]
-        hashPassword = sha256_crypt.hash(password) # pylint: disable = invalid-name
-        emailtoAdd = Emails(email=email, password=hashPassword) # pylint: disable = invalid-name
+        hashPassword = sha256_crypt.hash(password)  # pylint: disable = invalid-name
+        emailtoAdd = Emails(
+            email=email, password=hashPassword
+        )  # pylint: disable = invalid-name
         if len(Emails.query.filter_by(email=email).all()) != 0:
             flask.flash("Email you have typed already exists", "danger")
             return flask.redirect(flask.url_for("signup"))
@@ -129,12 +140,12 @@ def signup():
 
 
 @app.route("/spotify_login", methods=["GET"])
-def spotify_login(): # pylint: disable = missing-function-docstring
+def spotify_login():  # pylint: disable = missing-function-docstring
     params = {
         "client_id": client_id,
         "response_type": "token",
         "redirect_uri": redirect_uri,
-        "scope": "playlist-read-private"
+        "scope": "playlist-read-private",
     }
 
     resp = requests.get(
@@ -146,18 +157,20 @@ def spotify_login(): # pylint: disable = missing-function-docstring
 
 
 @app.route("/callback", methods=["GET", "POST"])
-def callback(): # pylint: disable = missing-function-docstring
-    if flask.request.method == "GET": # pylint: disable = no-else-return
+def callback():  # pylint: disable = missing-function-docstring
+    if flask.request.method == "GET":  # pylint: disable = no-else-return
         return flask.render_template("callback.html")
     else:
         session["token"] = flask.request.args["token"]
         return flask.redirect("/home")
 
+
 @app.route("/profile", methods=["GET"])
 def profile():
     token = session.get("token") or ""
     response = my_Profile(token)
-    return flask.render_template("profile.html",profile_Details=response)
+    return flask.render_template("profile.html", profile_Details=response)
+
 
 app.run(
     debug=True,
