@@ -264,12 +264,11 @@ body {
     border-radius: 15px;
     display: grid;
     grid-template-areas: 
-        "input input input"
-        "basic space advanced"
-        "basic space advanced"
-        "sun  space advanced";
-    grid-template-columns: 1fr .5fr 1fr;
-    grid-template-rows: 10% 1fr 1fr;
+        "input input"
+        "basic advanced"
+        "sun advanced";
+    grid-template-columns: 1fr .5fr ;
+    grid-template-rows: 10% 1fr 30%;
 }
 
 .weather-forms{
