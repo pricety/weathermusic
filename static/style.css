@@ -162,41 +162,153 @@ body {
   /* HOME PAGE CSS */
   
   #home-page{
-      background: linear-gradient(315deg, #5ca0f2 0%, #aac3f1 74%);
-      background-size: 400% 400%;
-      animation: gradient 15s ease infinite;
-      height: 100vh;
-      color: rgb(77, 75, 75);
-      text-align: center;
+    background: linear-gradient(315deg, #5ca0f2 0%, #aac3f1 74%);
+    background-size: 400% 400%;
+    animation: gradient 15s ease infinite;
+    color: rgb(77, 75, 75);
+    text-align: center;
+    margin: 0;
+    height: 100%;
+    overflow: hidden;
+}
+
+@keyframes gradient {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+#landing-page{
+    margin:0;
+    padding: 0;
+    height: 100%;
+    width: 100%;
+}
+#main-section{
+    margin: auto;
+    display: table;
+}
+#main-info{
+    display: table-cell;
+    vertical-align: middle;
+    text-align: center;
+}
+
+.home-container{
+    display: grid;
+    gap: 3em;
+    padding: 2.5em;
+    grid-template-areas: 
+        "profile weather weather"
+        "profile weather weather"
+        "playlist weather weather"
+        "playlist weather weather"
+        "playlist weather weather";
+    grid-template-columns: 25% 2fr 2fr;
+    grid-template-rows: 1fr 1fr 1fr 1fr 1fr;
+    width: 100vw;
+    height: 100vh;
+}
+
+.home-container > div {
+    background-color: rgb(255, 255, 255);
+    text-align: center;
+    padding: 20px 0;
+    font-size: 25px;
   }
-  
-  @keyframes gradient {
-      0% {
-          background-position: 0% 50%;
-      }
-      50% {
-          background-position: 100% 50%;
-      }
-      100% {
-          background-position: 0% 50%;
-      }
-  }
-  
-  #landing-page{
-      margin:0;
-      padding: 0;
-      height: 100%;
-      width: 100%;
-  }
-  #main-section{
-      margin: auto;
-      display: table;
-  }
-  #main-info{
-      display: table-cell;
-      vertical-align: middle;
-      text-align: center;
-  }
+
+.profile-container{
+    grid-area: profile;
+    border-radius: 15px;
+    display: grid;
+    grid-template-areas: 
+        "title title"
+        "pic main"
+        "email email";
+    grid-template-columns: 40% 60%;
+    grid-template-rows: 10% 70% 20%;
+    gap: 20px;
+}
+
+.title{
+    grid-area: title;
+}
+
+.profile-image{
+    grid-area: pic;
+    float: left;
+    padding: 10%;
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+}
+
+.main-profile{
+    padding-top: 20%;
+    text-align: left;
+    grid-area: main;
+}
+
+.profile-email{
+    grid-area: email;
+}
+
+.weather-container{
+    grid-area: weather;
+    border-radius: 15px;
+    display: grid;
+    grid-template-areas: 
+        "input input"
+        "basic advanced"
+        "sun advanced";
+    grid-template-columns: 1fr .5fr ;
+    grid-template-rows: 10% 1fr 30%;
+}
+
+.weather-forms{
+    grid-area: input;
+}
+
+.basic-weather{
+    grid-area: basic;
+    text-align: left;
+    padding-left: 30px;
+}
+
+.sun-info{
+    grid-area: sun;
+    text-align: left;
+    padding-left: 50px;
+    padding-bottom: 20px;
+}
+
+.advanced-weather{
+    grid-area: advanced;
+    text-align: right;
+    padding-right: 30px;
+}
+.location-input{
+    float: left;
+    padding-left: 20px;
+}
+
+.form-check{
+    float: right;
+    padding-right: 20px;
+}
+
+.playlist-container{
+    grid-area: playlist;
+    border-radius: 15px;
+    padding-bottom: 0 !important;
+}
+
 
 #location-page{
     background: linear-gradient(315deg, #5ca0f2 0%, #aac3f1 74%);
