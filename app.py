@@ -67,7 +67,6 @@ def home():  # pylint: disable = missing-function-docstring
 
         token = session.get("token") or ""
         metric_type = flask.request.form.get("metric_options") or "m"
-        profile_details = my_Profile(token)
         weather_details, location_details = weather_info(zipcode, metric_type)
         sunset_times = sun_times(location_details["lat"], location_details["lon"])
         playlist_details = get_playlist(token, weather_details["weather_code"])
@@ -76,7 +75,6 @@ def home():  # pylint: disable = missing-function-docstring
             "home.html",
             zipcode=zipcode,
             token=token,
-            profile_details=profile_details,
             playlist_details=playlist_details,
             weather_details=weather_details,
             location_details=location_details,
