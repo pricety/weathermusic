@@ -6,6 +6,7 @@ body {
   /* LOGIN PAGE CSS */
   
   #login-page{
+      background: linear-gradient(to bottom, #153f65, #2d93d5);
       margin: 0;
       padding: 0;
       box-sizing: border-box;
@@ -21,9 +22,9 @@ body {
   
   .options{
       width:240px;
-      margin:35px auto;
+      margin:20% 15%;
       position:relative;
-      box-shadow: 0 0 20px 9px #6b63e71f;
+      box-shadow: 0 0 20px 9px #e5e3ec1f;
       border-radius: 30px;
   }
   
@@ -42,11 +43,20 @@ body {
       position: absolute;
       width: 130px;
       height: 100%;
-      background: #aac3f1;
+      background: #d7e0eb;
       border-radius: 30px;
       transition: .5s;
   }
   
+  .container{
+      padding-top: 10%;
+  }
+
+  .alert{
+      width: 60%;
+      margin: auto;
+  }
+
   .form-box{
       width:400px;
       height:480px;
@@ -133,20 +143,20 @@ body {
       .btn:hover, .btn:active, .btn:focus {
           outline: none; }
         .btn.btn-primary {
-          background: #aac3f1 !important;
-          border: 1px solid #aac3f1 !important;
+          background: #d7e0eb !important;
+          border: 1px solid #d7e0eb !important;
           color: #000 !important; }
           .btn.btn-primary:hover {
-            border: 1px solid #aac3f1;
+            border: 1px solid #d7e0eb;
             background: transparent;
-            color: #aac3f1; }
+            color: #d7e0eb; }
           .btn.btn-primary.btn-outline-primary {
-            border: 1px solid #aac3f1;
+            border: 1px solid #d7e0eb;
             background: transparent;
-            color: #aac3f1; }
+            color: #d7e0eb; }
             .btn.btn-primary.btn-outline-primary:hover {
               border: 1px solid transparent;
-              background: #aac3f1;
+              background: #d7e0eb;
               color: #fff; }
   
   .label{
@@ -162,7 +172,7 @@ body {
   /* HOME PAGE CSS */
   
   #home-page{
-    background: linear-gradient(315deg, #5ca0f2 0%, #aac3f1 74%);
+    background: linear-gradient(to bottom,#2d93d5, #5ca0f2, #a0c3e2, #d7e0eb);
     background-size: 400% 400%;
     animation: gradient 15s ease infinite;
     color: rgb(77, 75, 75);
@@ -182,22 +192,6 @@ body {
     100% {
         background-position: 0% 50%;
     }
-}
-
-#landing-page{
-    margin:0;
-    padding: 0;
-    height: 100%;
-    width: 100%;
-}
-#main-section{
-    margin: auto;
-    display: table;
-}
-#main-info{
-    display: table-cell;
-    vertical-align: middle;
-    text-align: center;
 }
 
 .home-container{
@@ -226,37 +220,15 @@ body {
 .profile-container{
     grid-area: profile;
     border-radius: 15px;
-    display: grid;
-    grid-template-areas: 
-        "title title"
-        "pic main"
-        "email email";
-    grid-template-columns: 40% 60%;
-    grid-template-rows: 10% 70% 20%;
-    gap: 20px;
-}
-
-.title{
-    grid-area: title;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
 }
 
 .profile-image{
     grid-area: pic;
-    float: left;
     padding: 10%;
-    width: 200px;
-    height: 200px;
+    width: 250px;
+    height: 250px;
     border-radius: 50%;
-}
-
-.main-profile{
-    padding-top: 20%;
-    text-align: left;
-    grid-area: main;
-}
-
-.profile-email{
-    grid-area: email;
 }
 
 .weather-container{
@@ -268,7 +240,8 @@ body {
         "basic advanced"
         "sun advanced";
     grid-template-columns: 1fr .5fr ;
-    grid-template-rows: 10% 1fr 30%;
+    grid-template-rows: 7% 1fr 30%;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
 }
 
 .weather-forms{
@@ -293,6 +266,9 @@ body {
     text-align: right;
     padding-right: 30px;
 }
+.advanced-weather p {
+    font-size: 1em;
+}
 .location-input{
     float: left;
     padding-left: 20px;
@@ -301,20 +277,156 @@ body {
 .form-check{
     float: right;
     padding-right: 20px;
+    font-size: 25px;
+}
+
+.form-btn{
+    background: #5ca0f2;
+    color: white;
+}
+
+.location-box{
+    font-size: 20px;
+    border-radius: 40px;
+    border: 1px solid transparent;
+    padding-left: 20px;
+}
+
+.location-box:focus, .location-box:hover, .location-box:active{
+    outline: none;
+}
+
+.location-box::placeholder{
+    margin: 2%;
+    color: #a0c3e2;
 }
 
 .playlist-container{
     grid-area: playlist;
     border-radius: 15px;
     padding-bottom: 0 !important;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
 }
 
+/* LANDING PAGE CSS */
 
-#location-page{
-    background: linear-gradient(315deg, #5ca0f2 0%, #aac3f1 74%);
-    background-size: 400% 400%;
-    animation: gradient 15s ease infinite;
-    height: 100vh;
+html{
+    height: 100%;
 }
-  
-  
+#landing-page{
+    margin:0;
+    height: 100%;
+    overflow: hidden;
+    background: linear-gradient(to bottom, #03131f, #153f65);
+}
+.main-section{
+    margin: auto;
+    padding-top: 20%;
+}
+.main-info{
+    text-align: center;
+    color: #f8f8f6;
+}  
+
+.rain {
+    position: static;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 2;
+}
+
+.rain.back-row {
+    display: none;
+    z-index: 1;
+    bottom: 60px;
+    opacity: 0.5;
+}
+
+body.back-row-toggle .rain.back-row {
+    display: block;
+}
+
+.drop {
+    position: absolute;
+    bottom: 100%;
+    width: 15px;
+    height: 120px;
+    pointer-events: none;
+    animation: drop 0.5s linear infinite;
+}
+
+@keyframes drop {
+    0% {
+        transform: translateY(0vh);
+    }
+    75% {
+        transform: translateY(90vh);
+    }
+    100% {
+        transform: translateY(90vh);
+    }
+}
+
+.stem {
+    width: 1px;
+    height: 60%;
+    margin-left: 7px;
+    background: linear-gradient(to bottom, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.25));
+    animation: stem 0.5s linear infinite;
+}
+
+@keyframes stem {
+    0% {
+        opacity: 1;
+    }
+    65% {
+        opacity: 1;
+    }
+    75% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 0;
+    }
+}
+
+.splat {
+    width: 15px;
+    height: 10px;
+    border-top: 2px dotted rgba(255, 255, 255, 0.5);
+    border-radius: 50%;
+    opacity: 1;
+    transform: scale(0);
+    animation: splat 0.5s linear infinite;
+    display: none;
+}
+
+@keyframes splat {
+    0% {
+        opacity: 1;
+        transform: scale(0);
+    }
+    80% {
+        opacity: 1;
+        transform: scale(0);
+    }
+    90% {
+        opacity: 0.5;
+        transform: scale(1);
+    }
+    100% {
+        opacity: 0;
+        transform: scale(1.5);
+    }
+}
+
+.splat-toggle {
+    top: 20px;
+}
+
+.back-row-toggle {
+    top: 90px;
+    line-height: 12px;
+    padding-top: 14px;
+}
