@@ -7,15 +7,48 @@
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat">
         <link rel="stylesheet" href="/static/style.css" />
+        <script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
         <title>Welcome Page</title>
     </head>
-    <body id = "landing-page" style = "background-image: url(static/clouds.jpg);">
-        <div id = "main-section">
-            <div id = "main-info">
+    <!-- <body id = "landing-page" style = "background-image: url(static/clouds.jpg);"> -->
+    <body id = "landing-page" class = "back-row-toggle splat-toggle">
+        <div class = "main-section">
+            <div class = "main-info">
                 <h1>Welcome to our Weather Music App!</h1>
                 <h3>What are we? We are an app that gives you a playlist based on the weather in your area!</h3>
-                <a href = "/handle_login" class = "btn2 btn-default btn-lg">Get Started</a>
+                <h4>Created by: Ricky Tran, Lauren Huynh, Ty Price, Bronson Tharpe</h4>
+                <h4><a href = "/handle_login" class = "btn2 btn-default btn-lg">Get Started</a></h4>
             </div>   
-        </div>     
+        </div> 
+        <div class="rain front-row"></div>
+        <div class="rain back-row"></div>   
     </body>
+    <script>
+        var makeItRain = function() {
+        //clear out everything
+        $('.rain').empty();
+
+        var increment = 0;
+        var drops = "";
+        var backDrops = "";
+
+        while (increment < 100) {
+            //couple random numbers to use for various randomizations
+            //random number between 98 and 1
+            var randoHundo = (Math.floor(Math.random() * (98 - 1 + 1) + 1));
+            //random number between 5 and 2
+            var randoFiver = (Math.floor(Math.random() * (5 - 2 + 1) + 2));
+            //increment
+            increment += randoFiver;
+            //add in a new raindrop with various randomizations to certain CSS properties
+            drops += '<div class="drop" style="left: ' + increment + '%; bottom: ' + (randoFiver + randoFiver - 1 + 100) + '%; animation-delay: 0.' + randoHundo + 's; animation-duration: 0.5' + randoHundo + 's;"><div class="stem" style="animation-delay: 0.' + randoHundo + 's; animation-duration: 0.5' + randoHundo + 's;"></div><div class="splat" style="animation-delay: 0.' + randoHundo + 's; animation-duration: 0.5' + randoHundo + 's;"></div></div>';
+            backDrops += '<div class="drop" style="right: ' + increment + '%; bottom: ' + (randoFiver + randoFiver - 1 + 100) + '%; animation-delay: 0.' + randoHundo + 's; animation-duration: 0.5' + randoHundo + 's;"><div class="stem" style="animation-delay: 0.' + randoHundo + 's; animation-duration: 0.5' + randoHundo + 's;"></div><div class="splat" style="animation-delay: 0.' + randoHundo + 's; animation-duration: 0.5' + randoHundo + 's;"></div></div>';
+        }
+
+        $('.rain.front-row').append(drops);
+        $('.rain.back-row').append(backDrops);
+        }
+
+        makeItRain();
+    </script>
 </html>

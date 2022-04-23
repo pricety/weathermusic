@@ -12,11 +12,9 @@
         <link rel="stylesheet" href="/static/style.css" />
         <title>Login and Signup Page</title>
     </head>
-    <body style = "background-image: url(static/clouds.jpg);" id = "login-page">
+    <body id = "login-page">
         <section class = "signup-page">
-            <div class = "container">
-                <div class = "row justify-content-center">
-                    {% with messages = get_flashed_messages(with_categories=true) %}
+            {% with messages = get_flashed_messages(with_categories=true) %}
                     <!-- Categories: success (green), info (blue), warning (yellow), danger (red) -->
                         {% if messages %}
                             {% for category, message in messages %}
@@ -27,10 +25,11 @@
                             {% endfor %}
                         {% endif %}
                     {% endwith %}
+            <div class = "container">
+                <div class = "row justify-content-center">
                     <div class = "col-md-6 col-lg-4">
                         <div id = "my-form" style = "display:block;">
                             <div class = "form-box">
-                                <h3 class="mb-4 text-center">Login</h3>
                                 <div class = "options">
                                     <div id = "btn"></div>
                                     <button type = "button" class = "toggle-button" onClick = "register()">Register</button>
@@ -102,10 +101,6 @@
                 this.classList.toggle("fa-eye-slash");
             });
 
-            const form = document.querySelector("form");
-            form.addEventListener("submit", function(e){
-                e.preventDefault();
-            });
         </script>
     </body>
 </html>
