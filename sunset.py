@@ -11,6 +11,8 @@ def sun_times(lat, lon):
     }
 
     sunset_results = requests.get(SUNSET_URL, params)
+    print("test")
+    print(sunset_results)
     sunset_response = sunset_results.json()
     results = sunset_response["results"]
 
