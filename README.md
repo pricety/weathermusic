@@ -1,6 +1,6 @@
 # WEATHERMUSIC
 
-This code is currently deployed on heroku here: https://sheltered-wildwood-65723.herokuapp.com/
+This code is currently deployed on heroku here: https://musicteam-sprint2.herokuapp.com/
 
 ## App Info:
 
