@@ -4,8 +4,6 @@ files to use their functions"""
 import os
 import flask
 import flask_login
-import requests
-import random
 from flask import session
 from flask_login import LoginManager
 from dotenv import find_dotenv, load_dotenv
@@ -44,7 +42,7 @@ def user(user_id):
     return Emails.query.get(int(user_id))
 
 
-def valid_zip(s):
+def valid_zip(s): # pylint: disable = invalid-name, missing-function-docstring
     return len(s) == 5 and s.isdigit()
 
 
@@ -117,7 +115,7 @@ def signup():
         email = data["email"]
         password = data["password"]
         hashPassword = sha256_crypt.hash(password)  # pylint: disable = invalid-name
-        emailtoAdd = Emails(
+        emailtoAdd = Emails( # pylint: disable = invalid-name
             email=email, password=hashPassword
         )  # pylint: disable = invalid-name
         if len(Emails.query.filter_by(email=email).all()) != 0:
