@@ -11,7 +11,6 @@ from flask_login import LoginManager
 from dotenv import find_dotenv, load_dotenv
 from passlib.hash import sha256_crypt
 from weather import weather_info
-from sunset import sun_times
 from models import db, Emails
 from spotify import get_playlist
 
@@ -64,7 +63,6 @@ def home():  # pylint: disable = missing-function-docstring
     token = session.get("token") or ""
     metric_type = flask.request.form.get("metric_options") or "m"
     weather_details, location_details = weather_info(zipcode, metric_type)
-    sunset_times = sun_times(location_details["lat"], location_details["lon"])
     playlist_details = get_playlist(weather_details["weather_code"])
 
     return flask.render_template(
@@ -74,7 +72,6 @@ def home():  # pylint: disable = missing-function-docstring
         playlist_details=playlist_details,
         weather_details=weather_details,
         location_details=location_details,
-        sunset_times=sunset_times,
     )
 
 @app.route("/")
