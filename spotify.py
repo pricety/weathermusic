@@ -138,13 +138,5 @@ def get_playlist(weather_code):
         "phrase": phrase
     }
 
-    SPOTIFY_GET_PLAYLIST_URL = f"https://api.spotify.com/v1/playlists/{playlist_id}" # pylint: disable = invalid-name
-
-    playlist_details = {
-        "playlist_id": json_resp["id"],
-        "playlist_name": json_resp["name"],
-        "link": json_resp["external_urls"]["spotify"],
-        "phrase": phrase
-    }
 
     return playlist_details
