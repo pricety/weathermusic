@@ -11,8 +11,12 @@ def sun_times(lat, lon):
     }
 
     sunset_results = requests.get(SUNSET_URL, params)
-    print("test")
-    print(sunset_results)
+    if not sunset_results.ok:
+        return {
+            "sunrise": "6:00:00 AM",
+            "sunset": "6:00:00 PM",
+            "daylength": "12:00:00"
+        }
     sunset_response = sunset_results.json()
     results = sunset_response["results"]
 
