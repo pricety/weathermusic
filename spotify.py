@@ -1,13 +1,16 @@
 import os 
 import requests
 import random
+import base64
+import json
 from dotenv import find_dotenv, load_dotenv
 
 load_dotenv(find_dotenv())
 
 client_id = os.getenv("CLIENT_ID")
 client_secret = os.getenv("CLIENT_SECRET")
-redirect_uri = f"{os.getenv('URL')}/callback"
+
+
 
 def my_Profile(token):
     dict = {}
@@ -22,7 +25,7 @@ def my_Profile(token):
 
     json_resp = response.json()
     if "email" in json_resp:
-        dict["email"] = json_resp["email"] 
+        dict["email"] = json_resp["email"]
     else:
         dict["email"]= None
     if "country" in json_resp:
@@ -31,13 +34,13 @@ def my_Profile(token):
         dict["country"] = None
     if "display_name" in json_resp:
         dict["display_name"] = json_resp["display_name"]
-    else: 
+    else:
         dict["display_name"] = None
 
     if "images" in json_resp:
         if len(json_resp["images"]) != 0:
             dict["images"] = json_resp["images"][0]["url"]
-        else: 
+        else:
             dict["images"] = None
     else:
         dict["images"] = None
@@ -45,7 +48,35 @@ def my_Profile(token):
     dict["followers"] = json_resp["followers"]["total"]
     return dict
 
-def get_playlist(token, weather_code): 
+
+
+
+
+
+
+def get_playlist(weather_code):
+
+    # Step 1 - Authorization
+    url = "https://accounts.spotify.com/api/token"
+    headers = {}
+    data = {}
+
+    # Encode as Base64
+    message = f"{client_id}:{client_secret}"
+    messageBytes = message.encode('ascii')
+    base64Bytes = base64.b64encode(messageBytes)
+    base64Message = base64Bytes.decode('ascii')
+
+
+    headers['Authorization'] = f"Basic {base64Message}"
+    data['grant_type'] = "client_credentials"
+
+    r = requests.post(url, headers=headers, data=data)
+
+    token = r.json()['access_token']
+
+
+
     playlist_details = {}
     rain = {389, 386, 359, 356, 353, 314, 311, 308, 305, 302, 299, 296, 293, 284, 281, 266, 263, 260, 248, 200, 185, 176, 143}
     snow = {395, 392, 377, 374, 371, 368, 365, 362, 350, 338, 335, 332, 329, 326, 323, 320, 317, 230, 227, 182, 179}
@@ -84,21 +115,28 @@ def get_playlist(token, weather_code):
         phrase = random_snow
 
 
-    SPOTIFY_GET_PLAYLIST_URL = f"https://api.spotify.com/v1/playlists/{playlist_id}" # pylint: disable = invalid-name
+    playlistUrl = f"https://api.spotify.com/v1/playlists/{playlist_id}" # pylint: disable = invalid-name
 
-    response = requests.get(
-            SPOTIFY_GET_PLAYLIST_URL,
-            headers={
-                "Authorization": f"Bearer {token}"
-            }
-        )
-    json_resp = response.json()
+
+
+
+    headers = {
+        "Authorization": f"Bearer {token}" 
+    }
+
+    res = requests.get(playlistUrl, headers=headers)
+
+    print(json.dumps(res.json(), indent=2))
+
+
+    data = res.json()
 
     playlist_details = {
-        "playlist_id": json_resp["id"],
-        "playlist_name": json_resp["name"],
-        "link": json_resp["external_urls"]["spotify"],
+        "playlist_id": data["id"],
+        "playlist_name": data["name"],
+        "link": data["external_urls"]["spotify"],
         "phrase": phrase
     }
+
 
     return playlist_details
