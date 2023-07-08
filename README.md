@@ -2,7 +2,7 @@
 
 ## App Info:
 
-This program recommends a Spotify playlist based on the weather conditions in the area where you are currently located. Development is currently in progress.
+This program recommends a Spotify playlist based on the weather conditions in the area where you are currently located. 
 
 ## Install and Run:
 
